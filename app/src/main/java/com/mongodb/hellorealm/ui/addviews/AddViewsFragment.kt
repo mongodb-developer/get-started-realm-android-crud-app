@@ -1,4 +1,4 @@
-package com.mongodb.hellorealm.ui.gallery
+package com.mongodb.hellorealm.ui.addviews
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +8,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mongodb.hellorealm.R
-import com.mongodb.hellorealm.databinding.FragmentGalleryBinding
+import com.mongodb.hellorealm.databinding.FragmentAddViewsBinding
 
-class GalleryFragment : Fragment() {
+class AddViewsFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
-    private var _binding: FragmentGalleryBinding? = null
+    private lateinit var addViewsViewModel: AddViewsViewModel
+    private var _binding: FragmentAddViewsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,15 +23,15 @@ class GalleryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        galleryViewModel =
-            ViewModelProvider(this).get(GalleryViewModel::class.java)
+    ): View {
+        addViewsViewModel =
+            ViewModelProvider(this).get(AddViewsViewModel::class.java)
 
-        _binding = FragmentGalleryBinding.inflate(inflater, container, false)
+        _binding = FragmentAddViewsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
+        addViewsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
