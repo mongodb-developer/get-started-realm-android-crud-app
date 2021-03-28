@@ -21,7 +21,11 @@ class HomeViewModel : ViewModel() {
 
     val text: LiveData<String> = _text
 
-    fun readData() {
+    init {
+        readData()
+    }
+
+    private fun readData() {
         val visitInfo = db.where(VisitInfo::class.java).findAll()
         if (visitInfo.isEmpty()) {
             db.executeTransactionAsync {
@@ -32,13 +36,21 @@ class HomeViewModel : ViewModel() {
                 _visitInfo.postValue(info)
             }
         } else {
-
             db.beginTransaction()
             visitInfo.first()?.apply {
                 _visitInfo.postValue(this)
                 visitCount++
             }
             db.commitTransaction()
+        }
+    }
+
+    fun onRefreshCount() {
+        val visitInfo = db.where(VisitInfo::class.java).findAll()
+        if (visitInfo.isNotEmpty()) {
+            visitInfo.first()?.let {
+                _visitInfo.value = it
+            }
         }
     }
 

@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.navGraphViewModels
+import com.mongodb.hellorealm.R
 import com.mongodb.hellorealm.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    private var homeViewModel =
-        ViewModelProvider.NewInstanceFactory().create(HomeViewModel::class.java)
+    private val homeViewModel: HomeViewModel by navGraphViewModels(R.id.mobile_navigation)
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -31,7 +31,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.readData()
 
         val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner, {
@@ -39,8 +38,12 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.visitInfo.observe(viewLifecycleOwner, {
-            binding.textHomeSubtitle.text = "You have visited us $it times"
+            binding.textHomeSubtitle.text = "You have visited this page $it times"
         })
+
+        binding.btRefreshCount.setOnClickListener {
+            homeViewModel.onRefreshCount()
+        }
     }
 
     override fun onDestroyView() {

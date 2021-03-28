@@ -10,4 +10,10 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Add Views</string>
     <string name="menu_slideshow">Delete Views</string>
+    <string name="views_to_be_added">Views to be added</string>
+    <string name="views_to_be_deleted">Views to be deleted</string>
+    <string name="ok">Ok</string>
+    <string name="update_view_count">Update View count is %d</string>
+    <string name="get_latest_count">Get latest Count</string>
+
 </resources>

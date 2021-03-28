@@ -2,12 +2,32 @@ package com.mongodb.hellorealm.ui.deleteviews
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.mongodb.hellorealm.ui.home.model.VisitInfo
+import io.realm.Realm
 
 class DeleteViewsViewModels : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is slideshow Fragment"
+    private val db = Realm.getDefaultInstance()
+
+    private val _visitInfo = MutableLiveData<VisitInfo>()
+    val visitInfo: LiveData<Int> = Transformations.map(_visitInfo) {
+        it.visitCount
     }
-    val text: LiveData<String> = _text
+
+    fun deleteViewCount(count: Int) {
+        val visitInfo = db.where(VisitInfo::class.java).findAll()
+        if (visitInfo.isNotEmpty()) {
+            db.beginTransaction()
+            visitInfo.first()?.apply {
+                visitCount = if (visitCount.minus(count) >= 0)
+                    visitCount.minus(count)
+                else
+                    0
+                _visitInfo.postValue(this)
+            }
+            db.commitTransaction()
+        }
+    }
 }

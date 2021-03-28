@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mongodb.hellorealm.R
 import com.mongodb.hellorealm.databinding.FragmentDeleteViewsBinding
+import com.mongodb.hellorealm.hideKeyboard
 
 class DeleteViewsFragment : Fragment() {
 
-    private lateinit var deleteViewsViewModels: DeleteViewsViewModels
+    private val deleteViewModel =
+        ViewModelProvider.NewInstanceFactory().create(DeleteViewsViewModels::class.java)
+
     private var _binding: FragmentDeleteViewsBinding? = null
 
     // This property is only valid between onCreateView and
@@ -24,18 +26,23 @@ class DeleteViewsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        deleteViewsViewModels =
-            ViewModelProvider(this).get(DeleteViewsViewModels::class.java)
-
         _binding = FragmentDeleteViewsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textSlideshow
-        deleteViewsViewModels.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btDeleteConfirm.setOnClickListener {
+            hideKeyboard()
+            deleteViewModel.deleteViewCount(binding.etViewCount.text.toString().toInt())
+        }
+
+        deleteViewModel.visitInfo.observe(viewLifecycleOwner) {
+            binding.tvViewCount.text = resources.getString(R.string.update_view_count, it)
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
