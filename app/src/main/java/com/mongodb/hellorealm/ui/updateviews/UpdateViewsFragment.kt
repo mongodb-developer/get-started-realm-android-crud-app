@@ -1,4 +1,4 @@
-package com.mongodb.hellorealm.ui.addviews
+package com.mongodb.hellorealm.ui.updateviews
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,10 +10,10 @@ import com.mongodb.hellorealm.R
 import com.mongodb.hellorealm.databinding.FragmentAddViewsBinding
 import com.mongodb.hellorealm.hideKeyboard
 
-class AddViewsFragment : Fragment() {
+class UpdateViewsFragment : Fragment() {
 
     private val addViewsViewModel =
-        ViewModelProvider.NewInstanceFactory().create(AddViewsViewModel::class.java)
+        ViewModelProvider.NewInstanceFactory().create(UpdateViewsViewModel::class.java)
     private var _binding: FragmentAddViewsBinding? = null
 
     // This property is only valid between onCreateView and
@@ -35,7 +35,7 @@ class AddViewsFragment : Fragment() {
 
         binding.btAddConfirm.setOnClickListener {
             hideKeyboard()
-            addViewsViewModel.addViewCount(binding.etViewCount.text.toString().toInt())
+            addViewsViewModel.updateViewCount(binding.etViewCount.text.toString().toInt())
         }
 
         addViewsViewModel.visitInfo.observe(viewLifecycleOwner) {

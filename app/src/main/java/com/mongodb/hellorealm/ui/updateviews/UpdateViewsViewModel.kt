@@ -1,14 +1,13 @@
-package com.mongodb.hellorealm.ui.addviews
+package com.mongodb.hellorealm.ui.updateviews
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mongodb.hellorealm.ui.home.model.VisitInfo
-import com.mongodb.hellorealm.ui.home.model.updateCount
 import io.realm.Realm
 
-class AddViewsViewModel : ViewModel() {
+class UpdateViewsViewModel : ViewModel() {
 
     private val db = Realm.getDefaultInstance()
 
@@ -17,7 +16,7 @@ class AddViewsViewModel : ViewModel() {
         it.visitCount
     }
 
-    fun addViewCount(count: Int) {
+    fun updateViewCount(count: Int) {
         val visitInfo = db.where(VisitInfo::class.java).findFirst()
         if (visitInfo == null) {
             db.executeTransactionAsync {
