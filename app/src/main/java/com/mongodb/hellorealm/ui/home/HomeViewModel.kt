@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mongodb.hellorealm.ui.home.model.VisitInfo
+import com.mongodb.hellorealm.ui.home.model.updateCount
 import io.realm.Realm
 
 class HomeViewModel : ViewModel() {
@@ -22,40 +23,31 @@ class HomeViewModel : ViewModel() {
     val text: LiveData<String> = _text
 
     init {
-        readData()
+        updateData()
     }
 
-    private fun readData() {
-        val visitInfo = db.where(VisitInfo::class.java).findAll()
-        if (visitInfo.isEmpty()) {
-            db.executeTransactionAsync {
-                val info = VisitInfo().apply {
-                    visitCount = 1
-                }
-                it.insert(info)
-                _visitInfo.postValue(info)
-            }
-        } else {
-            db.beginTransaction()
-            visitInfo.first()?.apply {
-                _visitInfo.postValue(this)
-                visitCount++
-            }
-            db.commitTransaction()
-        }
+    private fun updateData() {
+        var visitInfo = db.where(VisitInfo::class.java).findFirst()
+        visitInfo = visitInfo?.let { db.copyFromRealm(it).updateCount() } ?: VisitInfo().updateCount()
+        updateCountToDB(visitInfo)
     }
 
     fun onRefreshCount() {
-        val visitInfo = db.where(VisitInfo::class.java).findAll()
-        if (visitInfo.isNotEmpty()) {
-            visitInfo.first()?.let {
-                _visitInfo.value = it
-            }
+        val visitInfo = db.where(VisitInfo::class.java).findFirst()
+        visitInfo?.let {
+            _visitInfo.value = it
         }
     }
 
     override fun onCleared() {
         super.onCleared()
         db.close()
+    }
+
+    private fun updateCountToDB(info: VisitInfo) {
+        db.executeTransactionAsync {
+            it.copyToRealmOrUpdate(info)
+            _visitInfo.postValue(info)
+        }
     }
 }

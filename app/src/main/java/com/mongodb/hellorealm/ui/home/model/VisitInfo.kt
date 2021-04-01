@@ -12,3 +12,9 @@ open class VisitInfo : RealmObject() {
     var visitCount: Int = 0
 
 }
+
+fun VisitInfo.updateCount(): VisitInfo {
+    return apply {
+        visitCount++
+    }
+}
