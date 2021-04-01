@@ -17,10 +17,10 @@ class DeleteViewsViewModels : ViewModel() {
     }
 
     fun deleteViewCount(count: Int) {
-        val visitInfo = db.where(VisitInfo::class.java).findAll()
-        if (visitInfo.isNotEmpty()) {
+        val visitInfo = db.where(VisitInfo::class.java).findFirst()
+        if (visitInfo != null) {
             db.beginTransaction()
-            visitInfo.first()?.apply {
+            visitInfo.apply {
                 visitCount = if (visitCount.minus(count) >= 0)
                     visitCount.minus(count)
                 else
