@@ -3,7 +3,7 @@
     package="com.mongodb.hellorealm">
 
     <application
-        android:name=".App"
+        android:name=".HelloRealmSyncApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
