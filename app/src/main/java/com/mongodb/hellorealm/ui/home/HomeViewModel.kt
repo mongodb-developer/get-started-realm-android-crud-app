@@ -43,7 +43,7 @@ class HomeViewModel(private val realmApp: App) : ViewModel() {
         }
 
         fun onUserSuccess(user: User) {
-            val config = SyncConfiguration.Builder(user, "id").build()
+            val config = SyncConfiguration.Builder(user, user.id).build()
 
             Realm.getInstanceAsync(config, object : Realm.Callback() {
                 override fun onSuccess(realm: Realm) {
@@ -51,7 +51,10 @@ class HomeViewModel(private val realmApp: App) : ViewModel() {
                     visitInfo = if (visitInfo != null) {
                         realm.copyFromRealm(visitInfo).updateCount()
                     } else {
-                        VisitInfo().updateCount()
+                        VisitInfo().apply {
+                            partition = user.id
+                            visitCount++
+                        }
                     }
 
                     updateCountToDB(visitInfo, realm)
@@ -86,7 +89,7 @@ class HomeViewModel(private val realmApp: App) : ViewModel() {
         }
 
         fun onUserSuccess(user: User) {
-            val config = SyncConfiguration.Builder(user, "id").build()
+            val config = SyncConfiguration.Builder(user, user.id).build()
 
             Realm.getInstanceAsync(config, object : Realm.Callback() {
                 override fun onSuccess(realm: Realm) {

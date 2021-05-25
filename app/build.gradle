@@ -23,11 +23,11 @@ android {
 
         debug {
             minifyEnabled false
-            buildConfigField "String", "RealmAppId", "\"realmsyncapp-uoiqx\""
+            buildConfigField "String", "RealmAppId", "\"realmsyncapp-esrkv\""
         }
 
         release {
-            buildConfigField "String", "RealmAppId", "\"realmsyncapp-uoiqx\""
+            buildConfigField "String", "RealmAppId", "\"realmsyncapp-esrkv\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
