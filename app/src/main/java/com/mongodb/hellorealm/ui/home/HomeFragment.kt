@@ -6,13 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
+import com.mongodb.hellorealm.HelloRealmSyncApp
 import com.mongodb.hellorealm.R
 import com.mongodb.hellorealm.databinding.FragmentHomeBinding
 
+
 class HomeFragment : Fragment() {
 
-    private val homeViewModel: HomeViewModel by navGraphViewModels(R.id.mobile_navigation)
+    private val homeViewModel: HomeViewModel by navGraphViewModels(
+        R.id.mobile_navigation,
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    val realmApp = (requireActivity().application as HelloRealmSyncApp).realmSync
+                    return HomeViewModel(realmApp) as T
+                }
+            }
+        })
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -43,6 +57,14 @@ class HomeFragment : Fragment() {
 
         binding.btRefreshCount.setOnClickListener {
             homeViewModel.onRefreshCount()
+        }
+
+        homeViewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.pgLoading.visibility = if (it) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
     }
 

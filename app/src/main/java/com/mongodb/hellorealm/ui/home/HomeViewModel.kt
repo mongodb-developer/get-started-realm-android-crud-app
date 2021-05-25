@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 import com.mongodb.hellorealm.ui.home.model.VisitInfo
 import com.mongodb.hellorealm.ui.home.model.updateCount
 import io.realm.Realm
+import io.realm.mongodb.App
+import io.realm.mongodb.Credentials
+import io.realm.mongodb.User
+import io.realm.mongodb.sync.SyncConfiguration
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val realmApp: App) : ViewModel() {
 
-    private val db = Realm.getDefaultInstance()
     private val _text = MutableLiveData<String>().apply {
         value = "Welcome to Realm"
     }
@@ -22,32 +25,88 @@ class HomeViewModel : ViewModel() {
 
     val text: LiveData<String> = _text
 
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
     init {
         updateData()
     }
 
     private fun updateData() {
-        var visitInfo = db.where(VisitInfo::class.java).findFirst()
-        visitInfo = visitInfo?.let { db.copyFromRealm(it).updateCount() } ?: VisitInfo().updateCount()
-        updateCountToDB(visitInfo)
-    }
+        _isLoading.postValue(true)
+        fun updateCountToDB(info: VisitInfo, db: Realm) {
+            db.executeTransactionAsync {
+                it.copyToRealmOrUpdate(info)
+                _visitInfo.postValue(info)
+                _isLoading.postValue(false)
+            }
+        }
 
-    fun onRefreshCount() {
-        val visitInfo = db.where(VisitInfo::class.java).findFirst()
-        visitInfo?.let {
-            _visitInfo.value = it
+        fun onUserSuccess(user: User) {
+            val config = SyncConfiguration.Builder(user, "id").build()
+
+            Realm.getInstanceAsync(config, object : Realm.Callback() {
+                override fun onSuccess(realm: Realm) {
+                    var visitInfo = realm.where(VisitInfo::class.java).findFirst()
+                    visitInfo = if (visitInfo != null) {
+                        realm.copyFromRealm(visitInfo).updateCount()
+                    } else {
+                        VisitInfo().updateCount()
+                    }
+
+                    updateCountToDB(visitInfo, realm)
+                }
+
+                override fun onError(exception: Throwable) {
+                    super.onError(exception)
+                    //TODO: Implementation pending
+                    _isLoading.postValue(false)
+                }
+            })
+        }
+
+        realmApp.loginAsync(Credentials.anonymous()) {
+            if (it.isSuccess) {
+                onUserSuccess(it.get())
+            } else {
+                _isLoading.postValue(false)
+            }
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        db.close()
-    }
+    fun onRefreshCount() {
+        _isLoading.postValue(true)
 
-    private fun updateCountToDB(info: VisitInfo) {
-        db.executeTransactionAsync {
-            it.copyToRealmOrUpdate(info)
-            _visitInfo.postValue(info)
+        fun getUpdatedCount(realm: Realm) {
+            val visitInfo = realm.where(VisitInfo::class.java).findFirst()
+            visitInfo?.let {
+                _visitInfo.value = it
+                _isLoading.postValue(false)
+            }
+        }
+
+        fun onUserSuccess(user: User) {
+            val config = SyncConfiguration.Builder(user, "id").build()
+
+            Realm.getInstanceAsync(config, object : Realm.Callback() {
+                override fun onSuccess(realm: Realm) {
+                    getUpdatedCount(realm)
+                }
+
+                override fun onError(exception: Throwable) {
+                    super.onError(exception)
+                    //TODO: Implementation pending
+                    _isLoading.postValue(false)
+                }
+            })
+        }
+
+        realmApp.loginAsync(Credentials.anonymous()) {
+            if (it.isSuccess) {
+                onUserSuccess(it.get())
+            } else {
+                _isLoading.postValue(false)
+            }
         }
     }
 }

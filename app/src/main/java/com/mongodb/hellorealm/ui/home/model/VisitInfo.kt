@@ -7,7 +7,7 @@ import java.util.*
 open class VisitInfo : RealmObject() {
 
     @PrimaryKey
-    var id = UUID.randomUUID().toString()
+    var _id = UUID.randomUUID().toString()
 
     var visitCount: Int = 0
 
