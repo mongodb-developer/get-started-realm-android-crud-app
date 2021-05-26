@@ -5,15 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mongodb.hellorealm.HelloRealmSyncApp
 import com.mongodb.hellorealm.R
 import com.mongodb.hellorealm.databinding.FragmentDeleteViewsBinding
 import com.mongodb.hellorealm.hideKeyboard
+import com.mongodb.hellorealm.ui.home.HomeViewModel
 
 class DeleteViewsFragment : Fragment() {
 
-    private val deleteViewModel =
-        ViewModelProvider.NewInstanceFactory().create(DeleteViewsViewModels::class.java)
+    private val deleteViewModel by viewModels<DeleteViewsViewModels> {
+        object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val realmApp = (requireActivity().application as HelloRealmSyncApp).realmSync
+                return DeleteViewsViewModels(realmApp) as T
+            }
+        }
+    }
 
     private var _binding: FragmentDeleteViewsBinding? = null
 
