@@ -1,4 +1,4 @@
-package com.mongodb.hellorealm
+package com.mongodb.hellosyncrealm
 
 import android.app.Application
 import io.realm.Realm

@@ -1,4 +1,4 @@
-package com.mongodb.hellorealm.ui.home.model
+package com.mongodb.hellosyncrealm.ui.home.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

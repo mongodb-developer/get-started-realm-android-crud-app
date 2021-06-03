@@ -1,4 +1,4 @@
-package com.mongodb.hellorealm.ui.home
+package com.mongodb.hellosyncrealm.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
-import com.mongodb.hellorealm.HelloRealmSyncApp
-import com.mongodb.hellorealm.R
-import com.mongodb.hellorealm.databinding.FragmentHomeBinding
+import com.mongodb.hellosyncrealm.HelloRealmSyncApp
+import com.mongodb.hellosyncrealm.R
+import com.mongodb.hellosyncrealm.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment() {

@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.mongodb.hellorealm.ui.home.HomeFragment"
+        android:name="com.mongodb.hellosyncrealm.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.mongodb.hellorealm.ui.updateviews.UpdateViewsFragment"
+        android:name="com.mongodb.hellosyncrealm.ui.updateviews.UpdateViewsFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_add_views" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.mongodb.hellorealm.ui.deleteviews.DeleteViewsFragment"
+        android:name="com.mongodb.hellosyncrealm.ui.deleteviews.DeleteViewsFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_delete_views" />
 </navigation>

@@ -1,11 +1,11 @@
-package com.mongodb.hellorealm.ui.home
+package com.mongodb.hellosyncrealm.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.mongodb.hellorealm.ui.home.model.VisitInfo
-import com.mongodb.hellorealm.ui.home.model.updateCount
+import com.mongodb.hellosyncrealm.ui.home.model.VisitInfo
+import com.mongodb.hellosyncrealm.ui.home.model.updateCount
 import io.realm.Realm
 import io.realm.mongodb.App
 import io.realm.mongodb.Credentials

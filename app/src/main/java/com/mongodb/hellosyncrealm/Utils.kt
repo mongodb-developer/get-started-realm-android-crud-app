@@ -1,4 +1,4 @@
-package com.mongodb.hellorealm
+package com.mongodb.hellosyncrealm
 
 import android.app.Activity
 import android.content.Context

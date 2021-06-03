@@ -1,4 +1,4 @@
-package com.mongodb.hellorealm.ui.deleteviews
+package com.mongodb.hellosyncrealm.ui.deleteviews
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mongodb.hellorealm.HelloRealmSyncApp
-import com.mongodb.hellorealm.R
-import com.mongodb.hellorealm.databinding.FragmentDeleteViewsBinding
-import com.mongodb.hellorealm.hideKeyboard
-import com.mongodb.hellorealm.ui.home.HomeViewModel
+import com.mongodb.hellosyncrealm.HelloRealmSyncApp
+import com.mongodb.hellosyncrealm.R
+import com.mongodb.hellosyncrealm.databinding.FragmentDeleteViewsBinding
+import com.mongodb.hellosyncrealm.hideKeyboard
 
 class DeleteViewsFragment : Fragment() {
 
