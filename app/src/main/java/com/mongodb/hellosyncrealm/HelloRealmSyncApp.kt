@@ -8,7 +8,7 @@ import io.realm.mongodb.AppConfiguration
 class HelloRealmSyncApp : Application() {
 
     val realmSync by lazy {
-        App(AppConfiguration.Builder(BuildConfig.RealmAppId).build())
+        App(BuildConfig.RealmAppId)
     }
 
     override fun onCreate() {
