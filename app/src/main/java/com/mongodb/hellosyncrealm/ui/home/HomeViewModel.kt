@@ -47,17 +47,16 @@ class HomeViewModel(private val realmApp: App) : ViewModel() {
 
             Realm.getInstanceAsync(config, object : Realm.Callback() {
                 override fun onSuccess(realm: Realm) {
-                    var visitInfo = realm.where(VisitInfo::class.java).findFirst()
-                    visitInfo = if (visitInfo != null) {
-                        realm.copyFromRealm(visitInfo).updateCount()
-                    } else {
-                        VisitInfo().apply {
+                    realm.executeTransactionAsync {
+                        var visitInfo = it.where(VisitInfo::class.java).findFirst()
+                        visitInfo = visitInfo?.updateCount() ?: VisitInfo().apply {
                             partition = user.id
                             visitCount++
                         }
+                        _visitInfo.postValue(it.copyFromRealm(visitInfo))
+                        it.copyToRealmOrUpdate(visitInfo)
+                        _isLoading.postValue(false)
                     }
-
-                    updateCountToDB(visitInfo, realm)
                 }
 
                 override fun onError(exception: Throwable) {
