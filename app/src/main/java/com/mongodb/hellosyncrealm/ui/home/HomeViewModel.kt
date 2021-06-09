@@ -34,13 +34,6 @@ class HomeViewModel(private val realmApp: App) : ViewModel() {
 
     private fun updateData() {
         _isLoading.postValue(true)
-        fun updateCountToDB(info: VisitInfo, db: Realm) {
-            db.executeTransactionAsync {
-                it.copyToRealmOrUpdate(info)
-                _visitInfo.postValue(info)
-                _isLoading.postValue(false)
-            }
-        }
 
         fun onUserSuccess(user: User) {
             val config = SyncConfiguration.Builder(user, user.id).build()
