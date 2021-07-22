@@ -44,10 +44,11 @@ class HomeViewModel(private val realmApp: App) : ViewModel() {
                         var visitInfo = it.where(VisitInfo::class.java).findFirst()
                         visitInfo = visitInfo?.updateCount() ?: VisitInfo().apply {
                             partition = user.id
-                            visitCount++
+                        }.updateCount()
+
+                        it.copyToRealmOrUpdate(visitInfo).apply {
+                            _visitInfo.postValue(it.copyFromRealm(this))
                         }
-                        _visitInfo.postValue(it.copyFromRealm(visitInfo))
-                        it.copyToRealmOrUpdate(visitInfo)
                         _isLoading.postValue(false)
                     }
                 }
